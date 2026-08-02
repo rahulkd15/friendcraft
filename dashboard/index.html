@@ -127,7 +127,7 @@
 
 <div class="wrap">
   <div class="toolbar">
-    <a class="new-btn" href="creator.html"><svg class="icon" viewBox="0 0 24 24"><use href="#i-plus"></use></svg> New gift</a>
+    <a class="new-btn" href="../creator/index.html"><svg class="icon" viewBox="0 0 24 24"><use href="#i-plus"></use></svg> New gift</a>
   </div>
 
   <div class="spinner-wrap" id="loadingState"><div class="spinner"></div></div>
@@ -135,7 +135,7 @@
     <svg class="icon" viewBox="0 0 24 24"><use href="#i-heart-outline"></use></svg>
     <h2>No gifts yet</h2>
     <p>Everything you create will show up here — link, QR, all of it.</p>
-    <a class="new-btn" href="creator.html"><svg class="icon" viewBox="0 0 24 24"><use href="#i-plus"></use></svg> Create your first gift</a>
+    <a class="new-btn" href="../creator/index.html"><svg class="icon" viewBox="0 0 24 24"><use href="#i-plus"></use></svg> Create your first gift</a>
   </div>
   <div id="errorState" class="status error" style="display:none;"></div>
   <div id="grid" class="grid"></div>
@@ -159,7 +159,7 @@
   // Plain HTML/CSS/JS — talks to Firebase REST APIs directly, no SDK/module imports.
   var API_KEY = "AIzaSyC8ofOMzCWXFcoOvbgbY4EyJMaeQXu_4z0";
   var PROJECT_ID = "friendship-web-3610c";
-  var GIFT_PAGE_URL = window.location.origin + "/gift.html";
+  var GIFT_PAGE_URL = window.location.origin + "/gift/gift.html";
   var FIRESTORE_URL = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents:runQuery?key=" + API_KEY;
   var FIRESTORE_BASE = "https://firestore.googleapis.com/v1/";
 
@@ -170,7 +170,7 @@
     userEmail = localStorage.getItem('userEmail');
   } catch (e) {}
 
-  if (!idToken || !uid) { window.location.href = "login.html"; return; }
+  if (!idToken || !uid) { window.location.href = "../index.html"; return; }
 
   document.getElementById('userEmail').textContent = userEmail || '';
 
@@ -181,7 +181,7 @@
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userUid');
     } catch (e) {}
-    window.location.href = "login.html";
+    window.location.href = "../index.html";
   });
 
   function fsVal(field) {
