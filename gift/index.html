@@ -538,14 +538,26 @@ for (let i = 1; i <= total; i++) {
 }
 
 window.goTo = function(n) {
-  if (n < 1 || n > total) return;
+  if (n < 1 || n > total || n === current) return;
   const prev = document.getElementById('s' + current);
   const next = document.getElementById('s' + n);
-  prev.classList.add('exit');
-  setTimeout(() => { prev.classList.remove('active', 'exit'); }, 550);
+
+  // clear any stale transition classes left on every screen first (fixes blank/white page bug)
+  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('exit'); });
+
   next.classList.add('active');
+  // force reflow so the browser registers 'active' before we animate 'prev' out
+  void next.offsetWidth;
+
+  prev.classList.add('exit');
+  prev.classList.remove('active');
+
   current = n;
   document.querySelectorAll('.dot').forEach((d, i) => d.classList.toggle('active', i === n - 1));
+
+  clearTimeout(window.__exitCleanupTimer);
+  window.__exitCleanupTimer = setTimeout(() => { prev.classList.remove('exit'); }, 650);
+
   if (n === 3) startLoading();
 };
 
@@ -562,15 +574,19 @@ function startLoading() {
   const bar = document.getElementById('barFill');
   const lbl = document.getElementById('loadLabel');
   const bubble = document.getElementById('yesBubble');
+  bar.style.transition = 'none';
   bar.style.width = '0%';
   bubble.style.opacity = '0';
   lbl.textContent = 'LOADING...';
+  // force reflow so the 0% width is committed before re-enabling the transition
+  void bar.offsetWidth;
+  bar.style.transition = 'width 2.8s cubic-bezier(.4,0,.2,1)';
   requestAnimationFrame(() => { bar.style.width = '100%'; });
   setTimeout(() => {
     lbl.textContent = 'LOADED ✓';
     bubble.style.opacity = '1';
     setTimeout(() => goTo(4), 900);
-  }, 3000);
+  }, 2900);
 }
 
 // ---- Firebase load ----
