@@ -130,7 +130,7 @@
   // Already signed in? go straight to dashboard.
   try {
     if (localStorage.getItem('idToken')) {
-      window.location.href = "dashboard.html";
+      window.location.href = "dashboard/dashboard.html";
     }
   } catch (e) {}
 
@@ -234,7 +234,7 @@
         localStorage.setItem('userEmail', result.data.email);
         localStorage.setItem('userUid', result.data.localId);
       } catch (e) {}
-      window.location.href = "dashboard.html";
+      window.location.href = "dashboard/dashboard.html";
     })
     .catch(function(err){
       console.error(err);
