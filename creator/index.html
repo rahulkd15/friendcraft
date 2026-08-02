@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#c23b6e">
+<title>Create Friendship Day Gift</title>
+<meta name="author" content="RAHUL KD">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23c23b6e' d='M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.8 5.6 4.1c2-.4 3.9.5 5 2.1.9-1.6 2.9-2.5 5-2.1C19.1 4.8 20.6 8.4 19.1 11.7 16.6 16.4 12 21 12 21z'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{--rose:#f472a8;--rose-deep:#c23b6e;--plum:#4a2438;--cream:#fce8ef;--paper:#fff;--line:#f0c0d0;}
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{background:var(--cream);font-family:'Nunito',sans-serif;color:var(--plum);min-height:100vh;
+    background-image:repeating-linear-gradient(180deg,rgba(255,182,210,.35) 0,rgba(255,182,210,.35) 32px,transparent 32px,transparent 64px);}
+  .icon{width:1em;height:1em;display:inline-block;vertical-align:-0.15em;fill:currentColor;flex-shrink:0;}
+  .wrap{max-width:560px;margin:0 auto;padding:40px 20px 100px;}
+  .topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px;}
+  .topbar a{font-size:.8rem;font-weight:800;color:var(--rose-deep);text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+  .topbar a .icon{width:.9em;height:.9em;}
+  .topbar button{background:none;border:1.5px solid var(--line);color:var(--plum);padding:8px 16px;border-radius:20px;font-size:.78rem;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;}
+  .topbar button:hover{border-color:var(--rose);}
+  h1{font-family:'Pacifico',cursive;font-size:1.8rem;color:var(--rose-deep);margin-bottom:6px;display:flex;align-items:center;gap:12px;}
+  h1 .icon{width:1.5rem;height:1.5rem;}
+  .lede{font-size:.9rem;color:#8a6070;margin-bottom:28px;line-height:1.6;}
+  .card{background:var(--paper);border:1.5px solid var(--line);border-radius:20px;padding:32px;box-shadow:0 16px 40px rgba(194,59,110,.1);}
+  .field{margin-bottom:20px;}
+  .field label{display:block;font-size:.78rem;font-weight:800;color:var(--rose-deep);margin-bottom:7px;letter-spacing:.02em;}
+  input[type=text],textarea{width:100%;border:1.5px solid var(--line);background:#fffafb;border-radius:12px;padding:12px 14px;font-family:'Nunito',sans-serif;font-size:.92rem;color:var(--plum);}
+  input:focus,textarea:focus{outline:none;border-color:var(--rose);box-shadow:0 0 0 4px rgba(244,114,168,.15);}
+  textarea{resize:vertical;min-height:100px;line-height:1.6;}
+  .char-hint{font-size:.73rem;color:#b09aa5;margin-top:5px;}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  @media(max-width:480px){.row2{grid-template-columns:1fr;}}
+  .swatches{display:flex;gap:10px;margin-top:6px;}
+  .swatch{width:36px;height:36px;border-radius:50%;cursor:pointer;border:2.5px solid transparent;transition:.2s;}
+  .swatch.sel{border-color:var(--plum);transform:scale(1.12);}
+  .swatch[data-t="rose"]{background:linear-gradient(135deg,#fce8ef,#f472a8);}
+  .swatch[data-t="lavender"]{background:linear-gradient(135deg,#e8d5f5,#a78bfa);}
+  .swatch[data-t="peach"]{background:linear-gradient(135deg,#fef3c7,#fb923c);}
+  .swatch[data-t="sage"]{background:linear-gradient(135deg,#d1fae5,#34d399);}
+  .swatch-label{font-size:.72rem;color:#8a6070;margin-top:8px;font-weight:700;}
+  .submit-btn{width:100%;background:var(--rose-deep);color:#fff;border:none;padding:16px;border-radius:14px;font-family:'Nunito',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:10px;transition:background .15s,transform .15s;}
+  .submit-btn .icon{width:1.05rem;height:1.05rem;}
+  .submit-btn:hover{background:#a83060;transform:translateY(-1px);}
+  .submit-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+  .spinner{width:16px;height:16px;border-radius:50%;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;animation:spin .7s linear infinite;display:none;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .err{display:none;margin-top:14px;padding:12px;background:#fdeeee;border:1px solid #f5c6c6;color:#a33a3a;border-radius:10px;font-size:.82rem;}
+
+  /* result */
+  #result{display:none;margin-top:24px;background:var(--paper);border:1.5px solid var(--line);border-radius:20px;padding:32px;text-align:center;box-shadow:0 16px 40px rgba(194,59,110,.1);opacity:0;transform:translateY(14px);transition:.5s;}
+  #result.show{opacity:1;transform:none;}
+  #result h2{font-family:'Pacifico',cursive;color:var(--rose-deep);font-size:1.4rem;margin-bottom:6px;}
+  #result .sub{font-size:.82rem;color:#8a6070;margin-bottom:20px;}
+  #qrBox{width:180px;height:180px;margin:0 auto 18px;border-radius:14px;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;background:#fffafb;overflow:hidden;}
+  #qrBox img{width:160px;height:160px;}
+  .link-row{display:flex;gap:8px;background:#faf0f4;border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;margin-bottom:14px;align-items:center;}
+  .link-row input{border:none;background:none;flex:1;font-size:.8rem;color:var(--plum);font-family:'Nunito',sans-serif;}
+  .link-row input:focus{box-shadow:none;}
+  .copy-btn{background:var(--rose-deep);color:#fff;border:none;padding:8px 14px;border-radius:9px;font-size:.76rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;}
+  .copy-btn:hover{background:#a83060;}
+  .result-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+  .ghost{background:none;border:1.5px solid var(--line);color:var(--plum);padding:10px 16px;border-radius:10px;font-size:.8rem;font-weight:800;cursor:pointer;font-family:'Nunito',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+  .ghost .icon{width:.95em;height:.95em;}
+  .ghost:hover{border-color:var(--rose);background:#faf0f4;}
+</style>
+</head>
+<body>
+
+<svg style="position:absolute;width:0;height:0;overflow:hidden" aria-hidden="true">
+  <defs>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.8 5.6 4.1c2-.4 3.9.5 5 2.1.9-1.6 2.9-2.5 5-2.1C19.1 4.8 20.6 8.4 19.1 11.7 16.6 16.4 12 21 12 21z"/></symbol>
+    <symbol id="i-envelope" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="2.3" y="6" width="19.4" height="13" rx="2.6"/><path d="M3 7.3l7.4 5.7c.9.7 2.3.7 3.2 0L21 7.3"/></symbol>
+    <symbol id="i-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v13"/><path d="M7 11l5 5 5-5"/><path d="M4 20h16"/></symbol>
+    <symbol id="i-open" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h7v7"/><path d="M10 14L21 3"/><path d="M20 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
+  </defs>
+</svg>
+
+<div class="wrap">
+  <div class="topbar">
+    <a href="/dashboard/"><svg class="icon" viewBox="0 0 24 24"><use href="#i-arrow-left"></use></svg> My Gifts</a>
+    <button id="signOutBtn">Sign out</button>
+  </div>
+  <h1>Create a Gift <svg class="icon" viewBox="0 0 24 24"><use href="#i-envelope"></use></svg></h1>
+  <p class="lede">Fill in the details below — a beautiful page will be created just for them.</p>
+
+  <div class="card">
+    <form id="giftForm" onsubmit="return false;">
+      <div class="row2">
+        <div class="field">
+          <label for="fromName">Your name</label>
+          <input type="text" id="fromName" name="fromName" maxlength="40" required>
+        </div>
+        <div class="field">
+          <label for="toName">Friend name</label>
+          <input type="text" id="toName" name="toName" maxlength="40" required>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="message">Your message (shown on last page)</label>
+        <textarea id="message" name="message" maxlength="600" required>I'm so grateful to have you in my life. Thank you for being my biggest supporter, my secret keeper, and the one who always knows how to make me smile. From endless talks to silly laughs and every moment in between, life feels brighter because of you. Wishing you all the happiness, love, peace, and success you truly deserve. Never forget how special, strong, and deeply loved you are.</textarea>
+        <div class="char-hint" id="msgCount">0 / 600</div>
+      </div>
+
+      <div class="field">
+        <label for="certMsg">Certificate message (shown on award page)</label>
+        <textarea id="certMsg" name="certMsg" maxlength="300" style="min-height:80px;">You are the most precious person I have ever had. I just wanna say thank you for being into my life listening to all my rants and being there when I needed you the most.</textarea>
+        <div class="char-hint" id="certCount">0 / 300</div>
+      </div>
+
+      <div class="field">
+        <label for="defBody">"Friends" definition text (shown on page 2)</label>
+        <textarea id="defBody" name="defBody" maxlength="400" style="min-height:90px;">People who know how weird you are and don't judge you for it. People who can make you laugh till tears run down your face. Your irreplaceable group that means the world to you. The best thing you can have and the best thing you can be.</textarea>
+        <div class="char-hint" id="defCount">0 / 400</div>
+      </div>
+
+      <div class="field">
+        <label for="letterHeading">Letter heading (shown on last page, above your message)</label>
+        <input type="text" id="letterHeading" name="letterHeading" maxlength="80" value="Happy FriendshipDay to my forever best friend">
+        <div class="char-hint" id="headCount">0 / 80</div>
+      </div>
+
+      <div class="field">
+        <label>Colour theme</label>
+        <div class="swatches">
+          <div class="swatch sel" data-t="rose" title="Rose"></div>
+          <div class="swatch" data-t="lavender" title="Lavender"></div>
+          <div class="swatch" data-t="peach" title="Peach"></div>
+          <div class="swatch" data-t="sage" title="Sage"></div>
+        </div>
+        <div class="swatch-label" id="themeLabel">Rose selected</div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span class="spinner" id="spinner"></span>
+        <span id="btnLabel" style="display:flex;align-items:center;gap:8px;">Create gift page <svg class="icon" viewBox="0 0 24 24"><use href="#i-heart"></use></svg></span>
+      </button>
+      <div class="err" id="errBox"></div>
+    </form>
+  </div>
+
+  <div id="result">
+    <h2 id="resultTitle">Your gift is ready!</h2>
+    <p class="sub">Share the link or let them scan the QR code.</p>
+    <div id="qrBox"><img id="qrImg" alt="QR Code"></div>
+    <div class="link-row">
+      <input type="text" id="linkOut" readonly>
+      <button class="copy-btn" id="copyBtn">Copy</button>
+    </div>
+    <div class="result-actions">
+      <button class="ghost" id="dlQr"><svg class="icon" viewBox="0 0 24 24"><use href="#i-download"></use></svg> Download QR</button>
+      <a class="ghost" id="openLink" target="_blank"><svg class="icon" viewBox="0 0 24 24"><use href="#i-open"></use></svg> Open gift</a>
+      <button class="ghost" id="anotherBtn"><svg class="icon" viewBox="0 0 24 24"><use href="#i-plus"></use></svg> Create another</button>
+    </div>
+  </div>
+  <div style="text-align:center; font-size:.72rem; color:#b09aa5; margin-top:22px;">Crafted by RAHUL KD</div>
+</div>
+
+<script>
+(function(){
+  // Plain HTML/CSS/JS — talks to Firebase REST APIs directly, no SDK/module imports.
+  var API_KEY = "AIzaSyC8ofOMzCWXFcoOvbgbY4EyJMaeQXu_4z0";
+  var PROJECT_ID = "friendship-web-3610c";
+  var GIFT_PAGE_URL = window.location.origin + "/gift/";
+  var FIRESTORE_URL = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents/gifts?key=" + API_KEY;
+
+  var idToken = null, uid = null;
+  try {
+    idToken = localStorage.getItem('idToken');
+    uid = localStorage.getItem('userUid');
+  } catch (e) {}
+
+  if (!idToken || !uid) { window.location.href = "/"; return; }
+
+  document.getElementById('signOutBtn').addEventListener('click', function(){
+    try {
+      localStorage.removeItem('idToken');
+      localStorage.removeItem('refreshToken');
+      localStorage.removeItem('userEmail');
+      localStorage.removeItem('userUid');
+    } catch (e) {}
+    window.location.href = "/";
+  });
+
+  // char counters
+  function wireCounter(fieldId, countId, max) {
+    var el = document.getElementById(fieldId);
+    var out = document.getElementById(countId);
+    function update() { out.textContent = el.value.length + ' / ' + max; }
+    el.addEventListener('input', update);
+    update(); // reflect prefilled default text immediately
+  }
+  wireCounter('message', 'msgCount', 600);
+  wireCounter('certMsg', 'certCount', 300);
+  wireCounter('defBody', 'defCount', 400);
+  wireCounter('letterHeading', 'headCount', 80);
+
+  // theme swatches
+  var THEME_NAMES = { rose:'Rose', lavender:'Lavender', peach:'Peach', sage:'Sage' };
+  var theme = 'rose';
+  document.querySelectorAll('.swatch').forEach(function(sw){
+    sw.addEventListener('click', function(){
+      document.querySelectorAll('.swatch').forEach(function(s){ s.classList.remove('sel'); });
+      sw.classList.add('sel'); theme = sw.dataset.t;
+      document.getElementById('themeLabel').textContent = THEME_NAMES[theme] + ' selected';
+    });
+  });
+
+  // id generator
+  function genId(n) {
+    n = n || 9;
+    var c='abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+    var arr=new Uint32Array(n); crypto.getRandomValues(arr);
+    return Array.prototype.map.call(arr, function(v){ return c[v % c.length]; }).join('');
+  }
+
+  document.getElementById('giftForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    var errBox = document.getElementById('errBox');
+    errBox.style.display = 'none';
+    var fromName = document.getElementById('fromName').value.trim();
+    var toName   = document.getElementById('toName').value.trim();
+    var message  = document.getElementById('message').value.trim();
+    var certMsg  = document.getElementById('certMsg').value.trim();
+    var defBody  = document.getElementById('defBody').value.trim();
+    var letterHeading = document.getElementById('letterHeading').value.trim();
+    if (!fromName || !toName || !message) return;
+
+    var btn = document.getElementById('submitBtn');
+    var sp  = document.getElementById('spinner');
+    var lbl = document.getElementById('btnLabel');
+    btn.disabled=true; sp.style.display='inline-block'; lbl.style.display='none';
+
+    var giftId = genId();
+    var body = {
+      fields: {
+        giftId: { stringValue: giftId },
+        ownerUid: { stringValue: uid },
+        fromName: { stringValue: fromName },
+        toName: { stringValue: toName },
+        message: { stringValue: message },
+        certMessage: { stringValue: certMsg },
+        defBody: { stringValue: defBody },
+        letterHeading: { stringValue: letterHeading },
+        theme: { stringValue: theme },
+        createdAt: { timestampValue: new Date().toISOString() }
+      }
+    };
+
+    fetch(FIRESTORE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + idToken },
+      body: JSON.stringify(body)
+    })
+    .then(function(res){
+      if (!res.ok) return res.json().then(function(d){ throw new Error((d.error && d.error.message) || 'Failed to save gift'); });
+      return res.json();
+    })
+    .then(function(){
+      var link = GIFT_PAGE_URL + '?id=' + giftId;
+      var qrUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=400x400&data=' + encodeURIComponent(link) + '&color=4A2438&bgcolor=FFFFFF&margin=12';
+
+      document.getElementById('linkOut').value = link;
+      document.getElementById('resultTitle').textContent = 'For ' + toName + ", it's ready!";
+      document.getElementById('qrImg').src = qrUrl;
+      document.getElementById('openLink').href = link;
+
+      document.getElementById('copyBtn').onclick = function(){
+        navigator.clipboard.writeText(link);
+        var b = document.getElementById('copyBtn');
+        b.textContent='Copied!'; setTimeout(function(){ b.textContent='Copy'; },1600);
+      };
+      document.getElementById('dlQr').onclick = function(){
+        var a=document.createElement('a'); a.href=qrUrl;
+        a.download = toName + '-gift-qr.png'; a.click();
+      };
+      document.getElementById('anotherBtn').onclick = function(){
+        document.getElementById('giftForm').reset();
+        document.getElementById('msgCount').textContent = document.getElementById('message').value.length + ' / 600';
+        document.getElementById('certCount').textContent = document.getElementById('certMsg').value.length + ' / 300';
+        document.getElementById('defCount').textContent = document.getElementById('defBody').value.length + ' / 400';
+        document.getElementById('headCount').textContent = document.getElementById('letterHeading').value.length + ' / 80';
+        document.querySelectorAll('.swatch').forEach(function(s){ s.classList.remove('sel'); });
+        document.querySelector('.swatch[data-t="rose"]').classList.add('sel');
+        theme = 'rose';
+        document.getElementById('themeLabel').textContent = 'Rose selected';
+        var r=document.getElementById('result');
+        r.classList.remove('show');
+        setTimeout(function(){ r.style.display='none'; },300);
+        window.scrollTo({top:0,behavior:'smooth'});
+      };
+
+      var r = document.getElementById('result');
+      r.style.display='block';
+      requestAnimationFrame(function(){ r.classList.add('show'); });
+      r.scrollIntoView({behavior:'smooth',block:'start'});
+    })
+    .catch(function(err){
+      console.error(err);
+      errBox.textContent = "Error: " + err.message;
+      errBox.style.display='block';
+    })
+    .finally(function(){
+      btn.disabled=false; sp.style.display='none'; lbl.style.display='flex';
+    });
+  });
+})();
+</script>
+</body>
+</html>
