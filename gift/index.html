@@ -211,6 +211,7 @@ html[data-theme="sage"]{
 }
 @keyframes shimmer{from{transform:translateX(-100%);}to{transform:translateX(100%);}}
 .loading-label{font-size:.78rem;letter-spacing:.12em;color:var(--sub2);text-transform:uppercase;}
+.loading-pct{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:700;color:var(--accent-mid);margin-top:6px;letter-spacing:.02em;}
 .yes-bubble{
   display:flex;align-items:center;gap:8px;
   background:#fff;border-radius:16px 16px 16px 4px;
@@ -444,6 +445,7 @@ html[data-theme="sage"]{
   <p class="award-heading">Lifetime Friend Award</p>
   <div class="bar-heart"><svg class="icon" viewBox="0 0 24 24"><use href="#i-heart"></use></svg></div>
   <div class="bar-track"><div class="bar-fill" id="barFill"></div></div>
+  <div class="loading-pct" id="loadPct">0%</div>
   <div class="loading-label" id="loadLabel">LOADING...</div>
   <div class="yes-bubble" id="yesBubble" style="opacity:0;"><svg class="icon" viewBox="0 0 24 24"><use href="#i-cat"></use></svg> Yes! you deserve that</div>
   <div class="award-cats">
@@ -573,20 +575,41 @@ document.addEventListener('touchend', e => {
 function startLoading() {
   const bar = document.getElementById('barFill');
   const lbl = document.getElementById('loadLabel');
+  const pct = document.getElementById('loadPct');
   const bubble = document.getElementById('yesBubble');
+  const DURATION = 2800; // ms — keep in sync with .bar-fill CSS transition duration
+
   bar.style.transition = 'none';
   bar.style.width = '0%';
   bubble.style.opacity = '0';
   lbl.textContent = 'LOADING...';
+  pct.textContent = '0%';
+
   // force reflow so the 0% width is committed before re-enabling the transition
   void bar.offsetWidth;
-  bar.style.transition = 'width 2.8s cubic-bezier(.4,0,.2,1)';
+  bar.style.transition = 'width ' + DURATION + 'ms cubic-bezier(.4,0,.2,1)';
   requestAnimationFrame(() => { bar.style.width = '100%'; });
-  setTimeout(() => {
-    lbl.textContent = 'LOADED ✓';
-    bubble.style.opacity = '1';
-    setTimeout(() => goTo(4), 900);
-  }, 2900);
+
+  const start = performance.now();
+  function tick(now) {
+    const elapsed = now - start;
+    const raw = Math.min(1, elapsed / DURATION);
+    // ease-out to roughly match the bar's cubic-bezier motion
+    const eased = 1 - Math.pow(1 - raw, 3);
+    const value = Math.round(eased * 100);
+    pct.textContent = value + '%';
+
+    if (raw < 1) {
+      requestAnimationFrame(tick);
+    } else {
+      pct.textContent = '100%';
+      lbl.textContent = 'LOADED ✓';
+      bubble.style.opacity = '1';
+      // brief pause so the person sees "100% / LOADED ✓" before the smooth auto-scroll
+      setTimeout(() => goTo(4), 700);
+    }
+  }
+  requestAnimationFrame(tick);
 }
 
 // ---- Firebase load ----
