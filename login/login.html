@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#a94868">
+<title>Sign in</title>
+<meta name="author" content="RAHUL KD">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23a94868' d='M12 21s-7.5-4.6-10-9.3C.5 8.4 2 4.8 5.6 4.1c2-.4 3.9.5 5 2.1.9-1.6 2.9-2.5 5-2.1C19.1 4.8 20.6 8.4 19.1 11.7 16.6 16.4 12 21 12 21z'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --rose:#d88ba3; --rose-deep:#a94868; --plum:#4a2438;
+    --cream:#fbf5ef; --paper:#fff; --line:#eadfe0;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  body{
+    background:var(--cream); font-family:'Manrope',sans-serif; color:var(--plum);
+    min-height:100vh; display:flex; align-items:center; justify-content:center; padding:24px;
+  }
+  .page{ display:flex; flex-direction:column; align-items:center; width:100%; max-width:420px; }
+  .card{
+    width:100%; background:var(--paper);
+    border:1px solid var(--line); border-radius:20px; padding:40px 34px;
+    box-shadow:0 20px 50px rgba(74,36,56,.10);
+  }
+  .eyebrow{ font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--rose-deep); font-weight:700; margin-bottom:12px; text-align:center;}
+  h1{ font-family:'Fraunces',serif; font-weight:600; font-size:1.7rem; text-align:center; margin-bottom:28px;}
+  .field{ margin-bottom:18px; }
+  .field label{ display:block; font-size:.78rem; font-weight:700; color:var(--rose-deep); margin-bottom:7px;}
+  input{
+    width:100%; border:1.5px solid var(--line); background:#fffdfb; border-radius:11px;
+    padding:12px 14px; font-family:'Manrope',sans-serif; font-size:.92rem; color:var(--plum);
+  }
+  input:focus{ outline:none; border-color:var(--rose); box-shadow:0 0 0 4px rgba(216,139,163,.15); }
+  .pw-wrap{ position:relative; }
+  .pw-wrap input{ padding-right:44px; }
+  .pw-toggle{
+    position:absolute; right:4px; top:50%; transform:translateY(-50%);
+    width:36px; height:36px; display:flex; align-items:center; justify-content:center;
+    background:none; border:none; cursor:pointer; color:#a58897; padding:0; border-radius:8px;
+  }
+  .pw-toggle:hover{ color:var(--rose-deep); background:#faf4f1; }
+  .pw-toggle svg{ width:20px; height:20px; }
+  .pw-toggle .eye-off{ display:none; }
+  .pw-toggle.showing .eye{ display:none; }
+  .pw-toggle.showing .eye-off{ display:block; }
+  .forgot-row{ text-align:right; margin-top:-10px; margin-bottom:18px; }
+  .forgot-row a{ font-size:.76rem; color:#a58897; text-decoration:none; cursor:pointer; }
+  .forgot-row a:hover{ color:var(--rose-deep); text-decoration:underline; }
+  button.submit{
+    width:100%; background:var(--plum); color:#fff; border:none; padding:14px;
+    border-radius:11px; font-weight:700; font-size:.92rem; cursor:pointer; margin-top:6px;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    transition:background .15s ease;
+  }
+  button.submit:hover{ background:var(--rose-deep); }
+  button.submit:disabled{ opacity:.55; cursor:not-allowed; }
+  .spinner{ width:15px; height:15px; border-radius:50%; border:2px solid rgba(255,255,255,.35); border-top-color:#fff; animation:spin .7s linear infinite; display:none;}
+  @keyframes spin{ to{ transform:rotate(360deg);} }
+  .switch{ text-align:center; font-size:.85rem; color:#8a6d7b; margin-top:20px; }
+  .switch a{ color:var(--rose-deep); font-weight:700; text-decoration:none; cursor:pointer; }
+  .error-box{ display:none; margin-top:16px; padding:12px 14px; background:#fdeeee; border:1px solid #f0c9c9; color:#a33a3a; border-radius:9px; font-size:.82rem; }
+  .success-box{ display:none; margin-top:16px; padding:12px 14px; background:#eefbf3; border:1px solid #c3ecd5; color:#227a4c; border-radius:9px; font-size:.82rem; }
+  .credit{ text-align:center; font-size:.72rem; color:#b09aa5; margin-top:18px; }
+</style>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <div class="eyebrow">Gift Builder</div>
+      <h1 id="formTitle">Sign in</h1>
+
+      <form id="authForm" onsubmit="return false;">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" required autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <div class="pw-wrap">
+            <input type="password" id="password" name="password" required autocomplete="current-password" minlength="6">
+            <button type="button" class="pw-toggle" id="pwToggle" aria-label="Show password">
+              <svg class="eye" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+              <svg class="eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.94 10.94 0 0 1 12 19c-7 0-11-7-11-7a20.3 20.3 0 0 1 4.22-5.44M9.9 4.24A10.6 10.6 0 0 1 12 5c7 0 11 7 11 7a20.3 20.3 0 0 1-2.18 3.06M14.12 14.12a3 3 0 1 1-4.24-4.24"/><path d="M1 1l22 22"/></svg>
+            </button>
+          </div>
+        </div>
+        <div class="forgot-row" id="forgotRow">
+          <a id="forgotLink">Forgot password?</a>
+        </div>
+        <button type="submit" class="submit" id="submitBtn">
+          <span class="spinner" id="spinner"></span>
+          <span id="btnLabel">Sign in</span>
+        </button>
+        <div class="error-box" id="errorBox"></div>
+        <div class="success-box" id="successBox"></div>
+      </form>
+
+      <div class="switch">
+        <span id="switchText">Don't have an account?</span>
+        <a id="switchLink">Create one</a>
+      </div>
+    </div>
+    <div class="credit">Crafted by RAHUL KD</div>
+  </div>
+
+<script>
+(function(){
+  // Plain JS + Firebase Identity Toolkit REST API — no SDK / module imports needed.
+  var API_KEY = "AIzaSyC8ofOMzCWXFcoOvbgbY4EyJMaeQXu_4z0";
+  var BASE = "https://identitytoolkit.googleapis.com/v1/accounts";
+
+  var mode = 'signin';
+  var form = document.getElementById('authForm');
+  var submitBtn = document.getElementById('submitBtn');
+  var spinner = document.getElementById('spinner');
+  var btnLabel = document.getElementById('btnLabel');
+  var errorBox = document.getElementById('errorBox');
+  var successBox = document.getElementById('successBox');
+  var formTitle = document.getElementById('formTitle');
+  var switchText = document.getElementById('switchText');
+  var switchLink = document.getElementById('switchLink');
+  var pwInput = document.getElementById('password');
+  var pwToggle = document.getElementById('pwToggle');
+  var forgotRow = document.getElementById('forgotRow');
+  var forgotLink = document.getElementById('forgotLink');
+
+  // Already signed in? go straight to dashboard.
+  try {
+    if (localStorage.getItem('idToken')) {
+      window.location.href = "dashboard.html";
+    }
+  } catch (e) {}
+
+  pwToggle.addEventListener('click', function(){
+    var showing = pwToggle.classList.toggle('showing');
+    pwInput.type = showing ? 'text' : 'password';
+    pwToggle.setAttribute('aria-label', showing ? 'Hide password' : 'Show password');
+  });
+
+  switchLink.addEventListener('click', function(){
+    mode = mode === 'signin' ? 'signup' : 'signin';
+    if (mode === 'signup') {
+      formTitle.textContent = 'Create account';
+      btnLabel.textContent = 'Create account';
+      switchText.textContent = 'Already have an account?';
+      switchLink.textContent = 'Sign in';
+      forgotRow.style.display = 'none';
+    } else {
+      formTitle.textContent = 'Sign in';
+      btnLabel.textContent = 'Sign in';
+      switchText.textContent = "Don't have an account?";
+      switchLink.textContent = 'Create one';
+      forgotRow.style.display = 'block';
+    }
+    errorBox.style.display = 'none';
+    successBox.style.display = 'none';
+  });
+
+  forgotLink.addEventListener('click', function(){
+    errorBox.style.display = 'none';
+    successBox.style.display = 'none';
+    var email = document.getElementById('email').value.trim();
+    if (!email) {
+      errorBox.textContent = "Enter your email above first, then tap 'Forgot password?'.";
+      errorBox.style.display = 'block';
+      document.getElementById('email').focus();
+      return;
+    }
+    forgotLink.textContent = 'Sending…';
+    fetch(BASE + ':sendOobCode?key=' + API_KEY, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ requestType: 'PASSWORD_RESET', email: email })
+    })
+    .then(function(res){ return res.json().then(function(data){ return { ok: res.ok, data: data }; }); })
+    .then(function(result){
+      if (!result.ok) {
+        var code = result.data && result.data.error && result.data.error.message;
+        throw new Error(errMsg(code));
+      }
+      successBox.textContent = "Password reset link sent to " + email + ". Check your inbox.";
+      successBox.style.display = 'block';
+    })
+    .catch(function(err){
+      errorBox.textContent = err.message || "Couldn't send reset email. Please try again.";
+      errorBox.style.display = 'block';
+    })
+    .finally(function(){
+      forgotLink.textContent = 'Forgot password?';
+    });
+  });
+
+  function errMsg(code) {
+    if (code === 'INVALID_LOGIN_CREDENTIALS' || code === 'INVALID_PASSWORD' || code === 'EMAIL_NOT_FOUND') return "Incorrect email or password.";
+    if (code === 'EMAIL_EXISTS') return "That email is already registered — try signing in.";
+    if (code === 'WEAK_PASSWORD : Password should be at least 6 characters') return "Password should be at least 6 characters.";
+    if (code && code.indexOf('WEAK_PASSWORD') === 0) return "Password should be at least 6 characters.";
+    if (code === 'INVALID_EMAIL') return "That email address looks invalid.";
+    if (code === 'TOO_MANY_ATTEMPTS_TRY_LATER') return "Too many attempts — please wait a bit and try again.";
+    return "Something went wrong. Please try again.";
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    errorBox.style.display = 'none';
+    successBox.style.display = 'none';
+    var email = document.getElementById('email').value.trim();
+    var password = pwInput.value;
+
+    submitBtn.disabled = true;
+    spinner.style.display = 'inline-block';
+    btnLabel.textContent = mode === 'signin' ? 'Signing in…' : 'Creating…';
+
+    var endpoint = mode === 'signin' ? 'signInWithPassword' : 'signUp';
+    var url = BASE + ':' + endpoint + '?key=' + API_KEY;
+
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email, password: password, returnSecureToken: true })
+    })
+    .then(function(res){ return res.json().then(function(data){ return { ok: res.ok, data: data }; }); })
+    .then(function(result){
+      if (!result.ok) {
+        var code = result.data && result.data.error && result.data.error.message;
+        throw new Error(errMsg(code));
+      }
+      try {
+        localStorage.setItem('idToken', result.data.idToken);
+        localStorage.setItem('refreshToken', result.data.refreshToken);
+        localStorage.setItem('userEmail', result.data.email);
+        localStorage.setItem('userUid', result.data.localId);
+      } catch (e) {}
+      window.location.href = "dashboard.html";
+    })
+    .catch(function(err){
+      console.error(err);
+      var msg = err.message || "Something went wrong. Please try again.";
+      if (!navigator.onLine) msg = "You appear to be offline. Please check your internet connection.";
+      errorBox.textContent = msg;
+      errorBox.style.display = 'block';
+    })
+    .finally(function(){
+      submitBtn.disabled = false;
+      spinner.style.display = 'none';
+      btnLabel.textContent = mode === 'signin' ? 'Sign in' : 'Create account';
+    });
+  });
+})();
+</script>
+</body>
+</html>
