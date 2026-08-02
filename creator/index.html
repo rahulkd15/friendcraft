@@ -81,7 +81,7 @@
 
 <div class="wrap">
   <div class="topbar">
-    <a href="dashboard.html"><svg class="icon" viewBox="0 0 24 24"><use href="#i-arrow-left"></use></svg> My Gifts</a>
+    <a href="../dashboard/dashboard.html"><svg class="icon" viewBox="0 0 24 24"><use href="#i-arrow-left"></use></svg> My Gifts</a>
     <button id="signOutBtn">Sign out</button>
   </div>
   <h1>Create a Gift <svg class="icon" viewBox="0 0 24 24"><use href="#i-envelope"></use></svg></h1>
@@ -165,7 +165,7 @@
   // Plain HTML/CSS/JS — talks to Firebase REST APIs directly, no SDK/module imports.
   var API_KEY = "AIzaSyC8ofOMzCWXFcoOvbgbY4EyJMaeQXu_4z0";
   var PROJECT_ID = "friendship-web-3610c";
-  var GIFT_PAGE_URL = window.location.origin + "/gift.html";
+  var GIFT_PAGE_URL = window.location.origin + "/gift/gift.html";
   var FIRESTORE_URL = "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/(default)/documents/gifts?key=" + API_KEY;
 
   var idToken = null, uid = null;
@@ -174,7 +174,7 @@
     uid = localStorage.getItem('userUid');
   } catch (e) {}
 
-  if (!idToken || !uid) { window.location.href = "login.html"; return; }
+  if (!idToken || !uid) { window.location.href = "../index.html"; return; }
 
   document.getElementById('signOutBtn').addEventListener('click', function(){
     try {
@@ -183,7 +183,7 @@
       localStorage.removeItem('userEmail');
       localStorage.removeItem('userUid');
     } catch (e) {}
-    window.location.href = "login.html";
+    window.location.href = "../index.html";
   });
 
   // char counters
